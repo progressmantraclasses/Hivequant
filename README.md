@@ -1,7 +1,9 @@
 # Hive_Hackathon_MVP
 this repo contains  code for basic prototype/MVP for hive hackathon
 
+(Hive_track_requirements_google_drive)[https://drive.google.com/file/d/16jqJHlONuIHzg9o5fkA4x5TV1-h1tulK/view?usp=drive_link]
 
+(Hive_auth_documentation)[https://docs.hiveauth.com/]
 
 🚀 Hive AI-Based Auto-Investing Bot for Web3 Tokens
 

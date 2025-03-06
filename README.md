@@ -25,9 +25,9 @@ Automated smart contract execution
 Users log in via Hive Keychain instead of manually entering private keys.
 
 ### Implemented Features:
-✅ JWT authentication for session management
-✅ Refresh tokens for extended sessions
-✅ User dashboard upon login
+- ✅ JWT authentication for session management
+- ✅ Refresh tokens for extended sessions
+- ✅ User dashboard upon login
 
 ## 💰 Automated Investment & Staking
 The bot automatically invests HIVE tokens based on market conditions.

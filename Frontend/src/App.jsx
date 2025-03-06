@@ -11,6 +11,7 @@ import FeatureSection from "./Components/Core/FeatureSection";
 import Chatbot from "./AiAssistant/Chatbot";
 import Navbar from "./Components/Common/Navbar";
 import Footer from "./Components/Common/Footer";
+import Profile from "./Analysis/Profile"; // Import the Profile component
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="/premium" element={<SubscriptionPlan/>}/>
             <Route path="/dashboard" element={<Dashboard/>}/>
             <Route path="/ai" element={<AutoInvestMent/>}/>
+            <Route path="/profile" element={<Profile/>}/> {/* Add this route */}
         </Routes>
         <Footer/>
       </BrowserRouter>

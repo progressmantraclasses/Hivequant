@@ -19,6 +19,8 @@ Real-time blockchain analysis
 
 Automated smart contract execution
 
+# Milestone 1: 6/3/2024 (Thursday)
+
 ## 🔑 Authentication (Hive Keychain Integration)
 Users log in via Hive Keychain instead of manually entering private keys.
 

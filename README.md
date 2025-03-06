@@ -33,27 +33,27 @@ Users log in via Hive Keychain instead of manually entering private keys.
 The bot automatically invests HIVE tokens based on market conditions.
 
 ### Workflow:
-1️⃣ User logs in via Hive Keychain
-2️⃣ Bot setup for automated investments
-3️⃣ Investment logic triggers based on Hive token prices
-4️⃣ Transaction executed using Hive Blockchain
-5️⃣ Staking & rewards tracking through Hive Engine
+- 1️⃣ User logs in via Hive Keychain
+- 2️⃣ Bot setup for automated investments
+- 3️⃣ Investment logic triggers based on Hive token prices
+- 4️⃣ Transaction executed using Hive Blockchain
+- 5️⃣ Staking & rewards tracking through Hive Engine
 
 ### Implemented Features:
-✅ Scheduled investments using node-cron (every 20 minutes)
-✅ Hive transactions executed programmatically
-✅ Dynamic investment amounts
+- ✅ Scheduled investments using node-cron (every 20 minutes)
+- ✅ Hive transactions executed programmatically
+- ✅ Dynamic investment amounts
 
 ## 🏆 Premium Subscription System
 Users stake 50 HIVE tokens to access premium features.
 
 ### Implemented Features:
-✅ Subscription Tracking using Hive transactions
-✅ Auto-renewal system (coming soon)
-✅ Database-less approach – Uses Hive transactions for verification
+- ✅ Subscription Tracking using Hive transactions
+- ✅ Auto-renewal system (coming soon)
+- ✅ Database-less approach – Uses Hive transactions for verification
 
 ## 🔗 Hive Blockchain Integration
 ### Implemented:
-✅ Hive Engine API for token interactions
-✅ DHive library for blockchain transactions
-✅ Real-time tracking of user stakes
+- ✅ Hive Engine API for token interactions
+- ✅ DHive library for blockchain transactions
+- ✅ Real-time tracking of user stakes

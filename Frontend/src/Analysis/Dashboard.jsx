@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  
   // Sample data
   const [cryptoHoldings] = useState({
     BTC: 0.5,
@@ -97,7 +100,7 @@ const Dashboard = () => {
         
         <div className="mt-auto pt-8 flex items-center">
           <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center">S</div>
-          <span className="ml-3">Sebastian</span>
+          <span className="ml-3 cursor-pointer" onClick={() => navigate('/profile')}>Profile</span>
           <span className="ml-auto">⚙️</span>
         </div>
       </div>

@@ -1,5 +1,8 @@
 const dhive = require("@hiveio/dhive");
 const crypto = require("crypto");
+const jwt = require("jsonwebtoken");
+
+const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";  // Store in .env
 
 const hiveLogin = async (req, res) => {
   try {
@@ -31,7 +34,10 @@ const hiveLogin = async (req, res) => {
       return res.status(401).json({ success: false, error: "Invalid signature" });
     }
 
-    res.json({ success: true, username });
+    // ✅ Generate JWT Token
+    const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: "30d" });
+
+    res.json({ success: true, username, token });
   } catch (error) {
     console.error("Hive Login Error:", error);
     res.status(500).json({ success: false, error: "Internal server error" });

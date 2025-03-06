@@ -19,93 +19,42 @@ Real-time blockchain analysis
 
 Automated smart contract execution
 
-🛠 Tech Stack
+## 🔑 Authentication (Hive Keychain Integration)
+Users log in via Hive Keychain instead of manually entering private keys.
 
-AI Model:
+### Implemented Features:
+✅ JWT authentication for session management
+✅ Refresh tokens for extended sessions
+✅ User dashboard upon login
 
-TensorFlow/PyTorch + Pre-trained market prediction model
+## 💰 Automated Investment & Staking
+The bot automatically invests HIVE tokens based on market conditions.
 
-Backend:
+### Workflow:
+1️⃣ User logs in via Hive Keychain
+2️⃣ Bot setup for automated investments
+3️⃣ Investment logic triggers based on Hive token prices
+4️⃣ Transaction executed using Hive Blockchain
+5️⃣ Staking & rewards tracking through Hive Engine
 
-Flask/FastAPI
+### Implemented Features:
+✅ Scheduled investments using node-cron (every 20 minutes)
+✅ Hive transactions executed programmatically
+✅ Dynamic investment amounts
 
-Frontend:
+## 🏆 Premium Subscription System
+Users stake 50 HIVE tokens to access premium features.
 
-Next.js + TailwindCSS
+### Implemented Features:
+✅ Subscription Tracking using Hive transactions
+✅ Auto-renewal system (coming soon)
+✅ Database-less approach – Uses Hive transactions for verification
 
-Blockchain:
-
-Hive Smart Contracts for executing investments
-
-🎯 How It Works?
-
-1️⃣ AI scans Hive transactions for trending tokens2️⃣ Fetches price predictions from an AI model3️⃣ Smart contract auto-invests in high-potential tokens4️⃣ Dashboard shows AI’s decision-making process
-
-🚀 Impact?
-
-✔️ Looks like a very advanced AI trading bot✔️ Combines Web3 + AI in an innovative way✔️ Saves time by leveraging pre-existing DeFi tools
-
-🔍 1️⃣ AI Model (Investment Prediction Engine)
-
-Goal:
-
-Build an AI model that predicts promising Web3 tokens based on Hive Blockchain transaction patterns and market data.
-
-Tech Stack:
-
-Machine Learning Framework: TensorFlow / PyTorch
-
-Data Processing: Pandas, NumPy
-
-Prebuilt Market Prediction Models: Kaggle, GitHub datasets
-
-Live Crypto Data Sources: CoinGecko, Binance API, Hive Blockchain API
-
-Steps:
-
-✅ Data Collection:
-
-Scrape Hive Blockchain transactions to identify trending tokens.
-
-Fetch historical market data from CoinGecko or Binance API.
-
-Store the data in a PostgreSQL or MongoDB database.
-
-✅ Model Training:
-
-Use LSTM (Long Short-Term Memory) networks for time-series price predictions.
-
-Train on historical token performance to predict future prices.
-
-Use sentiment analysis (e.g., NLP on social media/news) to refine predictions.
-
-✅ Real-time AI Predictions:
-
-Build an API that returns token investment probabilities.
-
-Continuously retrain the model with new market data.
-
-✅ Deploy Model:
-
-Host it using FastAPI / Flask for backend integration.
-
-Optimize for low-latency predictions using TensorFlow Lite / ONNX.
-
-🖥 2️⃣ Backend (API + AI Integration)
-
-Goal:
-
-Develop a backend that connects AI predictions, blockchain transactions, and the frontend dashboard.
-
-Tech Stack:
-
-Framework: Flask / FastAPI (FastAPI is better for async blockchain calls)
-
-Database: PostgreSQL / MongoDB
-
-Authentication: OAuth 2.0, JWT
-
-Blockchain API: Hive Blockchain SDK
+## 🔗 Hive Blockchain Integration
+### Implemented:
+✅ Hive Engine API for token interactions
+✅ DHive library for blockchain transactions
+✅ Real-time tracking of user stakes
 
 Steps:
 

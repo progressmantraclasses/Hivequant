@@ -1,71 +1,18 @@
-const {
-    fetchHiveBalance,
-    fetchTransactions,
-    fetchAutoInvestSettings,
-    updateAutoInvest,
-    stakeHiveTokens,
-    checkSubscription
-} = require("../services/hiveService");
+const hiveService = require("../services/hiveService");
 
-exports.getBalance = async (req, res) => {
+const handleRequest = async (serviceFunction, req, res) => {
     try {
-        const balance = await fetchHiveBalance();
-        res.json({ success: true, balance });
+        const data = await serviceFunction(req);
+        res.json({ success: true, data });
     } catch (error) {
-        console.error("Balance Fetch Error:", error);
-        res.status(500).json({ success: false, error: "Failed to fetch balance" });
+        console.error("Error:", error);
+        res.status(500).json({ success: false, error: "Operation failed" });
     }
 };
 
-exports.getTransactions = async (req, res) => {
-    try {
-        const transactions = await fetchTransactions();
-        res.json({ success: true, transactions });
-    } catch (error) {
-        console.error("Transaction Fetch Error:", error);
-        res.status(500).json({ success: false, error: "Failed to fetch transactions" });
-    }
-};
-
-exports.getAutoInvestSettings = async (req, res) => {
-    try {
-        const settings = await fetchAutoInvestSettings();
-        res.json({ success: true, settings });
-    } catch (error) {
-        console.error("Auto-Invest Settings Fetch Error:", error);
-        res.status(500).json({ success: false, error: "Failed to fetch auto-invest settings" });
-    }
-};
-
-exports.toggleAutoInvest = async (req, res) => {
-    try {
-        const { enable, frequency } = req.body; // e.g., "5 min", "10 min", "continuous"
-        const updatedSettings = await updateAutoInvest(enable, frequency);
-        res.json({ success: true, updatedSettings });
-    } catch (error) {
-        console.error("Auto-Invest Toggle Error:", error);
-        res.status(500).json({ success: false, error: "Failed to update auto-invest settings" });
-    }
-};
-
-exports.stakeForPremium = async (req, res) => {
-    try {
-        const { user } = req.body; // Hive username
-        const result = await stakeHiveTokens(user);
-        res.json({ success: true, result });
-    } catch (error) {
-        console.error("Staking Error:", error);
-        res.status(500).json({ success: false, error: "Failed to stake tokens for premium" });
-    }
-};
-
-exports.checkSubscriptionStatus = async (req, res) => {
-    try {
-        const { user } = req.query; // Hive username
-        const isPremium = await checkSubscription(user);
-        res.json({ success: true, isPremium });
-    } catch (error) {
-        console.error("Subscription Check Error:", error);
-        res.status(500).json({ success: false, error: "Failed to check subscription status" });
-    }
-};
+exports.getBalance = (req, res) => handleRequest(hiveService.fetchHiveBalance, req, res);
+exports.getTransactions = (req, res) => handleRequest(hiveService.fetchTransactions, req, res);
+exports.getAutoInvestSettings = (req, res) => handleRequest(hiveService.fetchAutoInvestSettings, req, res);
+exports.toggleAutoInvest = (req, res) => handleRequest(hiveService.updateAutoInvest, req, res);
+exports.stakeForPremium = (req, res) => handleRequest(hiveService.stakeHiveTokens, req, res);
+exports.checkSubscriptionStatus = (req, res) => handleRequest(hiveService.checkSubscription, req, res);

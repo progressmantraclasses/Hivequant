@@ -1,16 +1,9 @@
 const express = require("express");
-const {
-    getAutoInvestSettings,
-    toggleAutoInvest,
-    stakeForPremium,
-    checkSubscriptionStatus
-} = require("../controllers/investmentController");
-
 const router = express.Router();
+const investmentController = require("../controllers/investmentController");
 
-router.get("/autoinvest-settings", getAutoInvestSettings);
-router.post("/toggle-autoinvest", toggleAutoInvest);
-router.post("/stake-premium", stakeForPremium);
-router.get("/check-subscription", checkSubscriptionStatus);
+// Routes for Auto-Invest functionality
+router.get("/auto-invest/settings", investmentController.getAutoInvestSettings);
+router.post("/auto-invest/toggle", investmentController.toggleAutoInvest);
 
 module.exports = router;

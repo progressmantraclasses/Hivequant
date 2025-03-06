@@ -1,52 +1,40 @@
 const express = require("express");
 const cors = require("cors");
-const cron = require("node-cron");
-const hiveClient = require("@hiveio/dhive");
-const jwt = require("jsonwebtoken");
-const authRoutes = require("./routes/authRoutes");
-const investmentRoutes = require("./routes/investmentRoutes");
-const userRoutes = require("./routes/userRoutes"); // New route for user subscriptions
-const { checkPremiumUsers } = require("./utils/subscriptionUtils");
+const dotenv = require("dotenv");
+
+dotenv.config(); // Load environment variables
 
 const app = express();
+
+// Middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors()); // Enable CORS
 
-// Authentication Route
-app.use("/api/auth", authRoutes);
+// Routes
+const userRoutes = require("./routes/userRoutes");
+const investmentRoutes = require("./routes/investmentRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes");
+const authRoutes = require("./routes/authRoutes");
+const tokenRoutes = require("./routes/tokenRoutes");
+const transactionRoutes = require("./routes/transactionRoutes");
+const subscriptionRoutes = require("./routes/subscriptionRoutes");
+const hivePriceRoutes = require("./routes/hivePriceRoutes");
 
-// Hive Configuration (Previously in config file)
-const client = new hiveClient.Client(["https://api.hive.blog"]);
-const HIVE_ENGINE_API = "https://api.hive-engine.com/rpc/contracts";
-const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
 
-// Attach Hive config to app (so controllers can access it)
-app.locals.hiveClient = client;
-app.locals.hiveEngineApi = HIVE_ENGINE_API;
-app.locals.jwtSecret = JWT_SECRET;
-
-// Investment Routes
-app.use("/api/invest", investmentRoutes);
-
-// User-related Routes (for managing subscriptions)
 app.use("/api/users", userRoutes);
+app.use("/api/investments", investmentRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/tokens", tokenRoutes);
+app.use("/api/transactions", transactionRoutes);
+app.use("/api/subscription", subscriptionRoutes);
+app.use("/api/hive", hivePriceRoutes);
 
-// 🔹 Auto-invest every 20 minutes for eligible users
-cron.schedule("*/20 * * * *", async () => {
-    console.log("Checking premium users for auto-investment...");
-    
-    const premiumUsers = await checkPremiumUsers();
-    
-    if (premiumUsers.length > 0) {
-        console.log(`Auto-investing for ${premiumUsers.length} premium users...`);
-        const investmentController = require("./controllers/investmentController");
-        for (const user of premiumUsers) {
-            await investmentController.autoInvest(user, app.locals);
-        }
-    } else {
-        console.log("No premium users found for auto-investment.");
-    }
+// Handle 404 Errors
+app.use((req, res) => {
+    res.status(404).json({ success: false, error: "Route not found" });
 });
 
+// Start Server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

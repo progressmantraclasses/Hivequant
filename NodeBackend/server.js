@@ -12,14 +12,13 @@ app.use(cors()); // Enable CORS
 
 // Routes
 const userRoutes = require("./routes/userRoutes");
-const investmentRoutes = require("./routes/investmentRoutes");
+const investmentRoutes = require("./routes/autoInvestTradingRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const authRoutes = require("./routes/authRoutes");
 const tokenRoutes = require("./routes/tokenRoutes");
 const transactionRoutes = require("./routes/transactionRoutes");
 const subscriptionRoutes = require("./routes/subscriptionRoutes");
 const hivePriceRoutes = require("./routes/hivePriceRoutes");
-
 
 app.use("/api/users", userRoutes);
 app.use("/api/investments", investmentRoutes);
@@ -35,6 +34,21 @@ app.use((req, res) => {
     res.status(404).json({ success: false, error: "Route not found" });
 });
 
+// Binance Trading Config
+const { initBinance } = require("./services/binanceService");
+const { initTradeConfig } = require("./services/tradeConfigService");
+
+const config = {
+  BINANCE_API_KEY: process.env.BINANCE_API_KEY,
+  BINANCE_API_SECRET: process.env.BINANCE_API_SECRET,
+  SYMBOL: "BTCUSDT",
+  TRADE_AMOUNT: 0.001,
+};
+
+// Initialize Trading Services
+initBinance(config.BINANCE_API_KEY, config.BINANCE_API_SECRET);
+initTradeConfig(config);
+
 // Start Server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

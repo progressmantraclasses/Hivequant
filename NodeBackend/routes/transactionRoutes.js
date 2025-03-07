@@ -3,6 +3,6 @@ const router = express.Router();
 const transactionController = require("../controllers/transactionController");
 
 // Route for fetching user transactions
-router.get("/transactions/:username", transactionController.fetchUserTransactions);
+router.get("/:username", transactionController.fetchUserTransactions);
 
 module.exports = router;

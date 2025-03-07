@@ -1,8 +1,8 @@
-const { getHivePrice, executeHiveTrade } = require("../services/binanceService");
+const { getHivePrice, getHbdPrice, getHpPrice, executeHiveTrade, executeHbdTrade, executeHpTrade } = require("../services/binanceService");
 const { predictMarketTrend } = require("../services/aiTradingService");
 const TradeModel = require("../models/tradeModel");
 const { updateAutoInvest, checkSubscription } = require("../services/hiveService");
-const { initTradeConfig } = require("../services/tradeConfigService"); // ✅ Import initTradeConfig
+const { initTradeConfig } = require("../services/tradeConfigService");
 
 // Initialize trade configuration
 const tradeConfig = {
@@ -11,14 +11,29 @@ const tradeConfig = {
     takeProfitPercentage: 10, // Example: 10% take-profit
     autoInvestPercentage: 50 // Example: 50% reinvestment
 };
-initTradeConfig(tradeConfig); // ✅ Initialize trade configuration
+initTradeConfig(tradeConfig);
 
-const makeTradingDecision = async (user) => {
+const makeTradingDecision = async (user, asset) => {
     try {
-        const price = await getHivePrice();
-        if (!price) return { action: "hold", reason: "Price data unavailable" };
+        let price, executeTrade;
+        
+        // Determine the asset type and corresponding functions
+        if (asset === "HIVE") {
+            price = await getHivePrice();
+            executeTrade = executeHiveTrade;
+        } else if (asset === "HBD") {
+            price = await getHbdPrice();
+            executeTrade = executeHbdTrade;
+        } else if (asset === "HP") {
+            price = await getHpPrice();
+            executeTrade = executeHpTrade;
+        } else {
+            return { action: "hold", reason: "Invalid asset type" };
+        }
 
-        const prediction = await predictMarketTrend("HIVE", price);
+        if (!price) return { action: "hold", reason: `${asset} price data unavailable` };
+
+        const prediction = await predictMarketTrend(asset, price);
         const isPremium = await checkSubscription(user);
 
         let tradeAction = "hold";
@@ -27,29 +42,34 @@ const makeTradingDecision = async (user) => {
 
         if (prediction === "BUY") {
             tradeAction = "buy";
-            reason = "AI suggests buying";
-            const trade = await executeHiveTrade("BUY", TradeModel.tradeAmount);
+            reason = `AI suggests buying ${asset}`;
+            const trade = await executeTrade("BUY", TradeModel.tradeAmount);
             entryPrice = trade?.fills?.[0]?.price || price;
         }
         else if (prediction === "SELL") {
             tradeAction = "sell";
-            reason = "AI suggests selling";
-            await executeHiveTrade("SELL", TradeModel.tradeAmount);
+            reason = `AI suggests selling ${asset}`;
+            await executeTrade("SELL", TradeModel.tradeAmount);
         }
 
         // Implement Stop-Loss & Take-Profit
         if (tradeAction !== "hold") {
             setTimeout(async () => {
-                const currentPrice = await getHivePrice();
+                let currentPrice;
+                
+                if (asset === "HIVE") currentPrice = await getHivePrice();
+                else if (asset === "HBD") currentPrice = await getHbdPrice();
+                else if (asset === "HP") currentPrice = await getHpPrice();
+
                 const stopLossPrice = entryPrice * (1 - TradeModel.stopLossPercentage / 100);
                 const takeProfitPrice = entryPrice * (1 + TradeModel.takeProfitPercentage / 100);
 
                 if (currentPrice <= stopLossPrice) {
-                    await executeHiveTrade("SELL", TradeModel.tradeAmount);
-                    console.log("Stop-loss triggered. Selling at", currentPrice);
+                    await executeTrade("SELL", TradeModel.tradeAmount);
+                    console.log(`Stop-loss triggered for ${asset}. Selling at`, currentPrice);
                 } else if (currentPrice >= takeProfitPrice) {
-                    await executeHiveTrade("SELL", TradeModel.tradeAmount);
-                    console.log("Take-profit reached. Selling at", currentPrice);
+                    await executeTrade("SELL", TradeModel.tradeAmount);
+                    console.log(`Take-profit reached for ${asset}. Selling at`, currentPrice);
                     
                     // Auto-invest profits based on premium status
                     const profit = (takeProfitPrice - entryPrice) * TradeModel.tradeAmount;
@@ -58,7 +78,7 @@ const makeTradingDecision = async (user) => {
                     if (autoInvestAmount > 0) {
                         const autoInvestFrequency = isPremium ? "every second" : "20 min";
                         await updateAutoInvest(true, autoInvestFrequency);
-                        console.log(`Auto-investing ${autoInvestAmount} HIVE at ${autoInvestFrequency} frequency`);
+                        console.log(`Auto-investing ${autoInvestAmount} ${asset} at ${autoInvestFrequency} frequency`);
                     }
                 }
             }, 60000); // Check after 1 minute
@@ -66,8 +86,8 @@ const makeTradingDecision = async (user) => {
 
         return { action: tradeAction, reason, price };
     } catch (error) {
-        console.error("Hive Trading AI Error:", error);
-        return { action: "hold", reason: "Error in AI trading logic" };
+        console.error(`${asset} Trading AI Error:`, error);
+        return { action: "hold", reason: `Error in ${asset} AI trading logic` };
     }
 };
 

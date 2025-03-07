@@ -1,3 +1,4 @@
+
 import { Check, Lock } from "lucide-react"
 import AiIconImage from '../../Images/AiRoboIcon.png'
 
@@ -59,7 +60,7 @@ export default function PremiumPage() {
         </div>
 
         {/* Pro Plan Card */}
-        <div className="bg-purple-950 rounded-3xl p-8 flex flex-col relative">
+        <div className="bg-purple-950 bg-gradient-to-r from-purple-600 to-purple-400 rounded-3xl p-8 flex flex-col relative">
           <div className="absolute top-4 right-4">
             <div className="bg-purple-600 text-white text-sm px-3 py-1 rounded-full">Premium</div>
           </div>
@@ -119,6 +120,8 @@ export default function PremiumPage() {
     </div>
   )
 }
+
+
 
 
 

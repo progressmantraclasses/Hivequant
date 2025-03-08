@@ -45,8 +45,12 @@ const config = {
   TRADE_AMOUNT: 0.001,
 };
 
-// Initialize Trading Services
-initBinance(config.BINANCE_API_KEY, config.BINANCE_API_SECRET);
+console.log("🔍 Checking Binance API Keys:");
+console.log("API Key:", process.env.BINANCE_API_KEY ? "✅ Loaded" : "❌ MISSING");
+console.log("API Secret:", process.env.BINANCE_API_SECRET ? "✅ Loaded" : "❌ MISSING");
+
+// Initialize Binance API
+initBinance(process.env.BINANCE_API_KEY, process.env.BINANCE_API_SECRET);
 initTradeConfig(config);
 
 // Start Server

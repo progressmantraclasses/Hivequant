@@ -1,3 +1,4 @@
+import React from 'react';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import LandingPage from "./Components/Core/LandingPage";
@@ -14,6 +15,7 @@ import Footer from "./Components/Common/Footer";
 import Profile from "./Analysis/Profile"; // Import the Profile component
 
 function App() {
+  console.log('App rendering'); // Debug log
   return (
     <div className="min-h-screen bg-gray-900">
       <Chatbot/>
@@ -29,7 +31,11 @@ function App() {
             <Route path="/premium" element={<SubscriptionPlan/>}/>
             <Route path="/dashboard" element={<Dashboard/>}/>
             <Route path="/ai" element={<AutoInvestMent/>}/>
-            <Route path="/profile" element={<Profile/>}/>
+            <Route path="/profile" element={
+              <React.Suspense fallback={<div>Loading...</div>}>
+                <Profile />
+              </React.Suspense>
+            }/>
           </Routes>
           <Footer/>
         </div>

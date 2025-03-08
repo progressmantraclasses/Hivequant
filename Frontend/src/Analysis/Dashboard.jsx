@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
-import AIIconImage from "../Images/AiIconImage.png";
+import AIIconImage from "../Images/AiRoboIcon.png";
 import axios from "axios";
 import { Line } from "react-chartjs-2";
 import {
@@ -39,9 +39,9 @@ const Dashboard = () => {
   // Dropdown options for AUTO_INVEST
   const dropdownOptions = [
     { name: "Continue AUTO_INVEST.", icon: "⏱️", isPremium: true },
-    { name: "for 5 min.", icon: "⏱️" },
-    { name: "for 10 min.", icon: "⏱️" },
-    { name: "for 15 min.", icon: "⏱️" },
+    { name: "for 5 min.", icon: "⏱️", isPremium: true },
+    { name: "for 10 min.", icon: "⏱️",isPremium: true },
+    { name: "for 15 min.", icon: "⏱️",isPremium: true },
     { name: "for 20 min.", icon: "⏱️" },
     { name: "for 25 min.", icon: "⏱️" },
     { name: "for 30 min.", icon: "⏱️" },
@@ -76,10 +76,9 @@ const Dashboard = () => {
 
   // State for transactions
   const [transactions] = useState([
-    { crypto: "Ethereum", action: "buy", amount: "+5.00 ETH", percentage: "+0.89%" },
-    { crypto: "Monero", action: "buy", amount: "+0.90 XMR", percentage: "+0.16%" },
-    { crypto: "Tether", action: "buy", amount: "+2500.00 USDT", percentage: "+3.09%" },
-    { crypto: "Solana", action: "sell", amount: "-2.70 SOL", percentage: "-0.08%" },
+    { crypto: "HIVE", action: "buy", amount: "+5.00 HIVE", percentage: "+0.89%" },
+    { crypto: "HBD", action: "buy", amount: "+0.90 HBD", percentage: "+0.16%" },
+    { crypto: "HP", action: "buy", amount: "+2.00 HP", percentage: "+3.09%" },
   ]);
 
   // State for active menu and dropdown

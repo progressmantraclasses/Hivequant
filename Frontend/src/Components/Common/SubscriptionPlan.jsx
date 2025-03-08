@@ -1,125 +1,130 @@
-
 import { Check, Lock } from "lucide-react"
 import AiIconImage from '../../Images/AiRoboIcon.png'
 
-
 export default function PremiumPage() {
   return (
-    <div className="min-h-screen bg-black bg-[linear-gradient(rgba(0,0,0,0.9),rgba(0,0,0,0.9)) text-white flex flex-col items-center justify-center p-4">
-      <div className="max-w-5xl w-full mx-auto text-center mb-16">
-        <h1 className="text-5xl md:text-6xl font-bold mb-2">
-          Experience <span className="text-purple-500">Premium</span>
-        </h1>
-        <h1 className="text-5xl md:text-6xl font-bold mb-4">
-          AI <span className="text-purple-500">Features.</span>
-        </h1>
-        <div className="relative w-full max-w-xl mx-auto mb-6">
-          <div className="border-t border-gray-500 w-full absolute top-0"></div>
-          <div className="absolute right-0 w-1/2 h-8 border-r border-b border-gray-500 rounded-br-full -top-4"></div>
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-black text-white">
+      {/* Hero Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
+        <div className="text-center mb-16">
+          <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
+            Experience Premium AI Features
+          </h1>
+          <div className="relative w-full max-w-xl mx-auto mb-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-700"></div>
+            </div>
+            <div className="relative flex justify-center">
+              <span className="px-4 bg-gray-900 text-gray-400 text-lg">Unlock Advanced Features</span>
+            </div>
+          </div>
+          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+            Unlock advanced AI algorithms, priority insights, and exclusive tools to maximize your investment potential.
+          </p>
         </div>
-        <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-          Unlock advanced AI algorithms, priority insights, and exclusive tools to maximize your investment potential.
-        </p>
-      </div>
 
-      <div className="grid md:grid-cols-2 gap-8 w-full max-w-5xl">
-        {/* Free Plan Card */}
-        <div className="bg-gray-900 rounded-3xl p-8 flex flex-col">
-          <div className="flex justify-center mb-6">
-            <div className="bg-purple-600 rounded-full p-4 w-20 h-20 flex items-center justify-center">
-              <Lock className="w-10 h-10 text-white" />
+        {/* Subscription Cards */}
+        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          {/* Free Plan Card */}
+          <div className="relative bg-gray-800/50 backdrop-blur-sm rounded-3xl p-8 border border-gray-700 hover:border-gray-600 transition-all duration-300">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
+              <div className="bg-gray-900 text-gray-400 px-4 py-1 rounded-full text-sm">
+                Basic
+              </div>
             </div>
-          </div>
 
-          <h2 className="text-4xl font-bold text-center mb-10">Free Plan</h2>
+            <div className="flex justify-center mb-8">
+              <div className="bg-gray-700/50 rounded-full p-4 w-20 h-20 flex items-center justify-center">
+                <Lock className="w-10 h-10 text-gray-400" />
+              </div>
+            </div>
 
-          <div className="space-y-6 flex-grow">
-            <div className="flex items-start gap-3">
-              <div className="w-6 h-6 rounded-full border border-gray-500 mt-1 flex-shrink-0"></div>
-              <span>Basic market analysis</span>
-            </div>
-            <div className="flex items-start gap-3">
-              <div className="w-6 h-6 rounded-full border border-gray-500 mt-1 flex-shrink-0"></div>
-              <span>Limited investment recommendations</span>
-            </div>
-            <div className="flex items-start gap-3">
-              <div className="w-6 h-6 rounded-full border border-gray-500 mt-1 flex-shrink-0"></div>
-              <span>Standard portfolio tracking</span>
-            </div>
-            <div className="flex items-start gap-3">
-              <div className="w-6 h-6 rounded-full border border-gray-500 mt-1 flex-shrink-0"></div>
-              <span>Daily market updates</span>
-            </div>
-          </div>
+            <h2 className="text-3xl font-bold text-center mb-8">Free Plan</h2>
 
-          <div className="mt-10">
-            <button className="w-full bg-white text-black py-3 px-6 rounded-lg font-medium hover:bg-gray-200 transition-colors">
-              Start Trial
+            <div className="space-y-6 mb-8">
+              <FeatureItem available={true} text="Basic market analysis" />
+              <FeatureItem available={true} text="Limited investment recommendations" />
+              <FeatureItem available={true} text="Standard portfolio tracking" />
+              <FeatureItem available={false} text="AI-powered insights" />
+              <FeatureItem available={false} text="Priority support" />
+            </div>
+
+            <div className="text-center mb-8">
+              <div className="text-4xl font-bold mb-2">$0</div>
+              <div className="text-gray-400">Forever Free</div>
+            </div>
+
+            <button className="w-full bg-gray-700 hover:bg-gray-600 text-white py-3 px-6 rounded-xl font-medium transition-colors duration-200">
+              Get Started
             </button>
           </div>
-        </div>
 
-        {/* Pro Plan Card */}
-        <div className="bg-purple-950 bg-gradient-to-r from-purple-600 to-purple-400 rounded-3xl p-8 flex flex-col relative">
-          <div className="absolute top-4 right-4">
-            <div className="bg-purple-600 text-white text-sm px-3 py-1 rounded-full">Premium</div>
+          {/* Premium Plan Card */}
+          <div className="relative bg-gradient-to-br from-cyan-900/50 to-blue-900/50 backdrop-blur-sm rounded-3xl p-8 border border-cyan-700/50 hover:border-cyan-600/50 transition-all duration-300">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
+              <div className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 py-1 rounded-full text-sm">
+                Recommended
+              </div>
+            </div>
+
+            <div className="flex justify-center mb-8">
+              <div className="bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full p-4 w-20 h-20 flex items-center justify-center">
+                <img
+                  src={AiIconImage}
+                  alt="AI Icon"
+                  className="w-12 h-12 text-white"
+                />
+              </div>
+            </div>
+
+            <h2 className="text-3xl font-bold text-center mb-8">Premium Plan</h2>
+
+            <div className="space-y-6 mb-8">
+              <FeatureItem available={true} text="Advanced AI-powered analysis" highlight={true} />
+              <FeatureItem available={true} text="Unlimited investment insights" highlight={true} />
+              <FeatureItem available={true} text="Real-time portfolio optimization" highlight={true} />
+              <FeatureItem available={true} text="Priority customer support" highlight={true} />
+              <FeatureItem available={true} text="Exclusive investment opportunities" highlight={true} />
+            </div>
+
+            <div className="bg-gray-800/50 rounded-xl p-6 mb-8">
+              <div className="text-center mb-4">
+                <div className="text-sm text-gray-400 mb-1">Special Offer</div>
+                <div className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 text-transparent bg-clip-text">
+                  50 HIVE Tokens
+                </div>
+                <div className="text-cyan-400 font-semibold mt-1">per month</div>
+              </div>
+              
+              <div className="border-t border-gray-700 pt-4 mt-4">
+                <div className="text-center">
+                  <div className="text-sm text-gray-400 mb-1">Annual Plan</div>
+                  <div className="text-2xl font-bold text-cyan-400">99 HIVE Tokens</div>
+                  <div className="text-sm text-gray-400">Save up to 50%</div>
+                </div>
+              </div>
+            </div>
+
+            <button className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white py-3 px-6 rounded-xl font-medium transition-all duration-200">
+              Upgrade to Premium
+            </button>
           </div>
-
-          <div className="flex justify-center mb-6">
-            <div className="bg-purple-600 rounded-full p-4 w-20 h-20 flex items-center justify-center">
-              <img
-                src={AiIconImage}
-                alt="AI Icon"
-                width={100}
-                height={100}
-                className="text-white rounded-full"
-              />
-            </div>
-          </div>
-
-          <h2 className="text-4xl font-bold text-center mb-10">Pro Plan</h2>
-
-          <div className="space-y-6 flex-grow">
-            <div className="flex items-start gap-3">
-              <Check className="w-6 h-6 text-green-500 mt-1 flex-shrink-0" />
-              <span>AI-powered predictive market analysis</span>
-            </div>
-            <div className="flex items-start gap-3">
-              <Check className="w-6 h-6 text-green-500 mt-1 flex-shrink-0" />
-              <span>Access to exclusive investment opportunities</span>
-            </div>
-            <div className="flex items-start gap-3">
-              <Check className="w-6 h-6 text-green-500 mt-1 flex-shrink-0" />
-              <span>Priority insights and personalized strategies</span>
-            </div>
-            <div className="flex items-start gap-3">
-              <Check className="w-6 h-6 text-green-500 mt-1 flex-shrink-0" />
-              <span>Advanced portfolio optimization tools</span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4 mt-8 mb-6">
-            <div className="bg-purple-600 rounded-xl p-4 text-center">
-              <div className="text-sm mb-1">Monthly Plan</div>
-              <div className="text-2xl font-bold">Only 50 Hive Token</div>
-              <div className="text-3xl mt-1 text-green-400">(Early bird)</div>
-              <div className="text-xl font-bold">45 Hive Tokens</div>
-            </div>
-            <div className="bg-purple-600 rounded-xl p-4 text-center">
-              <div className="text-sm mb-1">Annual Plan</div>
-              <div className="text-4xl font-bold">99 Hive Token </div>
-              <div className="bg-white text-purple-900 text-sm py-1 px-2 rounded mt-2 font-medium">Get 50% OFF</div>
-            </div>
-          </div>
-
-          <button className="w-full bg-white text-purple-900 py-3 px-6 rounded-lg font-medium hover:bg-gray-200 transition-colors">
-            Get Premium
-          </button>
         </div>
       </div>
     </div>
   )
 }
+
+const FeatureItem = ({ available, text, highlight }) => (
+  <div className="flex items-start gap-3">
+    {available ? (
+      <Check className={`w-5 h-5 mt-1 flex-shrink-0 ${highlight ? 'text-cyan-400' : 'text-gray-400'}`} />
+    ) : (
+      <div className="w-5 h-5 mt-1 flex-shrink-0 rounded-full border border-gray-600" />
+    )}
+    <span className={highlight ? 'text-cyan-50' : 'text-gray-400'}>{text}</span>
+  </div>
+);
 
 
 

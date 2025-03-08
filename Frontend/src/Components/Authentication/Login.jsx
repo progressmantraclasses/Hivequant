@@ -22,7 +22,6 @@ const LoginPage = () => {
     const username = prompt("Enter your Hive username:");
     if (!username) return;
 
-    // Check if Hive Keychain is available
     if (!window.hive_keychain) {
       alert("Hive Keychain is not installed or enabled! Please install it from https://hive-keychain.com/");
       console.error("Hive Keychain extension is missing.");
@@ -30,17 +29,14 @@ const LoginPage = () => {
     }
 
     const message = `Login request for ${username} at ${new Date().toISOString()}`;
-
     console.log("Sending Hive Keychain request for:", username);
 
-    // Using window.hive_keychain for authentication
     window.hive_keychain.requestSignBuffer(username, message, "Posting", (response) => {
       console.log("Hive Keychain response:", response);
 
       if (response.success) {
         console.log("Signature:", response.result);
 
-        // Send signed message to backend
         fetch("http://localhost:5000/api/auth/hive-login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -56,7 +52,7 @@ const LoginPage = () => {
             if (data.success) {
               alert("Login successful! Redirecting...");
               localStorage.setItem("hiveUser", data.username);
-              window.location.href = "/Dashboard"; // Redirect after login
+              window.location.href = "/Dashboard";
             } else {
               alert("Login failed: " + data.error);
             }
@@ -72,55 +68,82 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-b from-green-900 to-gray-900 text-white relative overflow-hidden">
-      {/* Background Glow */}
-      <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 w-3/4 h-44 bg-green-500 opacity-30 blur-3xl z-0"></div>
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-black flex items-center justify-center px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8 relative">
+        {/* Background Glow Effect */}
+        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 blur-3xl -z-10 rounded-3xl"></div>
+        
+        {/* Login Container */}
+        <div className="bg-gray-900/80 backdrop-blur-xl rounded-2xl shadow-2xl p-8 relative z-10 border border-gray-800">
+          {/* Header */}
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+              {typingText}
+              <span className="animate-blink ml-1">|</span>
+            </h2>
+            <p className="mt-2 text-gray-400">Sign in to access your account</p>
+          </div>
 
-      {/* Typing Effect Heading */}
-      <h1 className="text-white text-4xl md:text-5xl font-black text-center shadow-2xl relative z-10">
-        <span>{typingText}</span>
-        <span className="animate-blink">|</span>
-      </h1>
+          {/* Form */}
+          <form className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Email
+              </label>
+              <input
+                type="email"
+                required
+                className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-500"
+                placeholder="Enter your email"
+              />
+            </div>
 
-      {/* Login Box */}
-      <div className="login-box bg-gray-900 p-8 rounded-2xl shadow-2xl w-96 relative transition mt-12 transform hover:scale-105">
-        <form>
-          <label className="block text-gray-400 text-sm mb-1">Email</label>
-          <input
-            type="email"
-            placeholder="Enter your email"
-            required
-            className="w-full p-3 mb-3 bg-gray-700 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-          />
-          <label className="block text-gray-400 text-sm mb-1">Password</label>
-          <input
-            type="password"
-            placeholder="Enter your password"
-            required
-            className="w-full p-3 mb-3 bg-gray-700 text-white rounded-full border border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-500 transition"
-          />
-          <button
-            type="submit"
-            className="w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-full transition font-semibold mb-2"
-          >
-            Log In
-          </button>
-        </form>
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Password
+              </label>
+              <input
+                type="password"
+                required
+                className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all duration-200 text-white placeholder-gray-500"
+                placeholder="Enter your password"
+              />
+            </div>
 
-        {/* Login with HIVE */}
-        <button
-          onClick={handleHiveLogin}
-          className="w-full bg-white text-black flex items-center justify-center py-3 rounded-full hover:bg-gray-200 transition shadow-md"
-        >
-          <img src={HiveImage} className="w-6 h-6 mr-2" alt="Hive Logo" />
-          Log In with HIVE
-        </button>
+            <button
+              type="submit"
+              className="w-full py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 transition-all duration-200"
+            >
+              Sign In
+            </button>
 
-        <div className="text-center text-gray-400 mt-4 text-sm">
-          Don't have an account?{" "}
-          <a href="/signup" className="text-white hover:underline">
-            Sign Up
-          </a>
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-700"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-2 bg-gray-900 text-gray-400">Or continue with</span>
+              </div>
+            </div>
+
+            {/* Hive Login Button */}
+            <button
+              type="button"
+              onClick={handleHiveLogin}
+              className="w-full flex items-center justify-center px-4 py-3 border border-gray-700 rounded-lg shadow-sm bg-gray-800/50 hover:bg-gray-800 transition-all duration-200"
+            >
+              <img src={HiveImage} className="w-5 h-5 mr-2" alt="Hive Logo" />
+              <span className="text-white">Sign in with Hive</span>
+            </button>
+          </form>
+
+          {/* Sign Up Link */}
+          <p className="mt-8 text-center text-sm text-gray-400">
+            Don't have an account?{" "}
+            <a href="/signup" className="font-medium text-cyan-500 hover:text-cyan-400 transition-colors">
+              Sign up
+            </a>
+          </p>
         </div>
       </div>
     </div>

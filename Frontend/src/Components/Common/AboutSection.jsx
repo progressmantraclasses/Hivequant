@@ -98,7 +98,7 @@ const StatCard = ({ number, text }) => (
 
 const ProcessCard = ({ number, title, description }) => (
   <div className="relative">
-    <div className="text-6xl font-bold text-gray-700/20 absolute -top-8 left-0">{number}</div>
+    <div className="text-6xl font-bold text-gray-200 absolute -top-8 left-0">{number}</div>
     <div className="pt-8">
       <h3 className="text-xl font-semibold mb-3">{title}</h3>
       <p className="text-gray-400">{description}</p>

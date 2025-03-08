@@ -1,4 +1,4 @@
-const { getHivePrice, tradeHive } = require("../services/binanceService");
+const { getHivePrice, tradeHive, getHBDPrice, tradeHBD } = require("../services/binanceService");
 const { predictMarketTrend } = require("../services/aiTradingService");
 const { initTradeConfig } = require("../services/tradeConfigService");
 
@@ -16,83 +16,86 @@ initTradeConfig(tradeConfig);
 let tradeIntervals = {}; // Store user-specific intervals
 
 const frequencyToMs = {
-    "Every Second": 1000,
-    "5 minutes": 5 * 60 * 1000,
-    "10 minutes": 10 * 60 * 1000,
-    "15 minutes": 15 * 60 * 1000,
-    "20 minutes": 20 * 60 * 1000,
-    "25 minutes": 25 * 60 * 1000,
-    "30 minutes": 30 * 60 * 1000
+    "Continue AUTO_INVEST.": 1000,
+    "for 5 min.": 5 * 60 * 1000,
+    "for 10 min.": 10 * 60 * 1000,
+    "for 15 min.": 15 * 60 * 1000,
+    "for 20 min.": 20 * 60 * 1000,
+    "for 25 min.": 25 * 60 * 1000,
+    "for 30 min.": 30 * 60 * 1000
 };
 
-const autoTradeHive = async (user, frequency) => {
-    try {
-        if (!frequencyToMs[frequency]) {
-            console.error(`❌ Invalid frequency: ${frequency}`);
-            return { action: "hold", reason: "Invalid frequency selected" };
-        }
-
-        // Clear previous interval if exists
-        if (tradeIntervals[user.username]) {
-            clearInterval(tradeIntervals[user.username]);
-            console.log(`🛑 Stopping previous trading session for ${user.username}`);
-        }
-
-        console.log(`🔵 Starting auto-trading for ${user.username} every ${frequency}`);
-
-        // Set new interval for trading
-        tradeIntervals[user.username] = setInterval(async () => {
-            console.log(`⏳ Executing trade for ${user.username}`);
-
-            const hivePrice = await getHivePrice();
-            if (!hivePrice) return console.log(`⚠️ HIVE price unavailable`);
-
-            console.log(`📈 Current HIVE Price: $${hivePrice}`);
-
-            let simulatedBalance = Math.floor(Math.random() * 500) + 100;
-            let autoInvestAmount = (tradeConfig.autoInvestPercentage / 100) * simulatedBalance;
-
-            let prediction = await predictMarketTrend("HIVE", hivePrice);
-            let tradeAction = "hold";
-            let reason = "Market stable";
-
-            if (DUMMY_MODE) {
-                console.log(`⚠️ Running in DUMMY MODE: No actual trades executed!`);
-                tradeAction = Math.random() > 0.5 ? "buy" : "sell";
-                reason = "Simulated trade in dummy mode";
-            } else {
-                if (prediction === "BUY") {
-                    tradeAction = "buy";
-                    reason = `AI suggests buying HIVE`;
-                    await tradeHive("BUY", autoInvestAmount);
-                } else if (prediction === "SELL") {
-                    tradeAction = "sell";
-                    reason = `AI suggests selling HIVE`;
-                    await tradeHive("SELL", autoInvestAmount);
-                }
-            }
-
-            console.log(`✅ Trade executed: ${tradeAction} ${autoInvestAmount} HIVE at $${hivePrice}`);
-        }, frequencyToMs[frequency]);
-
-        return { action: "started", reason: `Trading every ${frequency}` };
-
-    } catch (error) {
-        console.error(`🚨 HIVE Trading AI Error:`, error);
-        return { action: "hold", reason: "Error in HIVE AI trading logic" };
+const startAutoTrading = async (user, asset, getPriceFn, tradeFn, frequency) => {
+    if (!frequencyToMs[frequency]) {
+        console.error(`❌ Invalid frequency: ${frequency}`);
+        return { action: "hold", reason: "Invalid frequency selected" };
     }
+
+    if (tradeIntervals[`${user.username}_${asset}`]) {
+        clearInterval(tradeIntervals[`${user.username}_${asset}`]);
+        console.log(`🛑 Stopping previous trading session for ${asset} - ${user.username}`);
+    }
+
+    console.log(`🔵 Starting auto-trading for ${asset} every ${frequency}`);
+
+    tradeIntervals[`${user.username}_${asset}`] = setInterval(async () => {
+        console.log(`⏳ Executing trade for ${asset} - ${user.username}`);
+
+        const price = await getPriceFn();
+        if (!price) return console.log(`⚠️ ${asset} price unavailable`);
+
+        console.log(`📈 Current ${asset} Price: $${price}`);
+
+        let simulatedBalance = Math.floor(Math.random() * 500) + 100;
+        let autoInvestAmount = (tradeConfig.autoInvestPercentage / 100) * simulatedBalance;
+
+        let prediction = await predictMarketTrend(asset, price);
+        let tradeAction = "hold";
+        let reason = "Market stable";
+
+        if (DUMMY_MODE) {
+            console.log(`⚠️ Running in DUMMY MODE: No actual trades executed!`);
+            tradeAction = Math.random() > 0.5 ? "buy" : "sell";
+            reason = "Simulated trade in dummy mode";
+        } else {
+            if (prediction === "BUY") {
+                tradeAction = "buy";
+                reason = `AI suggests buying ${asset}`;
+                await tradeFn("BUY", autoInvestAmount);
+            } else if (prediction === "SELL") {
+                tradeAction = "sell";
+                reason = `AI suggests selling ${asset}`;
+                await tradeFn("SELL", autoInvestAmount);
+            }
+        }
+
+        console.log(`✅ Trade executed: ${tradeAction} ${autoInvestAmount} ${asset} at $${price}`);
+    }, frequencyToMs[frequency]);
+
+    return { action: "started", reason: `Trading every ${frequency}` };
+};
+
+// Start trading for HIVE
+const autoTradeHive = async (user, frequency) => {
+    return startAutoTrading(user, "HIVE", getHivePrice, tradeHive, frequency);
+};
+
+// Start trading for HBD
+const autoTradeHBD = async (user, frequency) => {
+    return startAutoTrading(user, "HBD", getHBDPrice, tradeHBD, frequency);
 };
 
 // Stop auto-trading for a user
 const stopAutoTrade = (user) => {
-    if (tradeIntervals[user.username]) {
-        clearInterval(tradeIntervals[user.username]);
-        delete tradeIntervals[user.username];
-        console.log(`🛑 Auto-trading stopped for ${user.username}`);
-        return { success: true, message: "Auto-trading stopped" };
-    } else {
-        return { success: false, message: "No active trading session found" };
-    }
+    Object.keys(tradeIntervals).forEach((key) => {
+        if (key.startsWith(user.username)) {
+            clearInterval(tradeIntervals[key]);
+            delete tradeIntervals[key];
+        }
+    });
+
+    console.log(`🛑 Auto-trading stopped for ${user.username}`);
+    return { success: true, message: "Auto-trading stopped" };
 };
 
-module.exports = { autoTradeHive, stopAutoTrade };
+module.exports = { autoTradeHive, autoTradeHBD, stopAutoTrade };

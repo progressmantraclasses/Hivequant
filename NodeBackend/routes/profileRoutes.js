@@ -20,8 +20,24 @@ router.get('/test/users', async (req, res) => {
     }
 });
 
-// Get user profile
-router.get('/:username', profileController.getProfile);
+// Profile route
+router.get('/api/profile/:username', async (req, res) => {
+    try {
+        console.log('Fetching profile for:', req.params.username);
+        const user = await User.findOne({ username: req.params.username });
+        
+        if (!user) {
+            console.log('User not found:', req.params.username);
+            return res.status(404).json({ success: false, error: 'User not found' });
+        }
+
+        console.log('User found:', user.username);
+        return res.json({ success: true, data: user });
+    } catch (error) {
+        console.error('Profile fetch error:', error);
+        return res.status(500).json({ success: false, error: error.message });
+    }
+});
 
 // Update user profile
 router.put('/:username', profileController.updateProfile);

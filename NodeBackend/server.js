@@ -1,23 +1,32 @@
-const express = require("express");
-const cors = require("cors");
+require('dotenv').config();
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
 const dotenv = require("dotenv");
 const connectDB = require("./config/database");
 
 dotenv.config(); // Load environment variables
 
+// Check if MongoDB URI is defined
+if (!process.env.MONGODB_URI) {
+  console.error('MONGODB_URI is not defined in environment variables');
+  process.exit(1);
+}
+
 // Connect to MongoDB
-connectDB();
+console.log('Attempting to connect to MongoDB...');
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('Successfully connected to MongoDB'))
+  .catch((err) => {
+    console.error('MongoDB Connection Error:', err.message);
+    process.exit(1);
+  });
 
 const app = express();
 
 // CORS configuration
 app.use(cors({
-    origin: [
-        'http://localhost:3000',
-        'http://localhost:3001',
-        'http://localhost:3002',
-        'http://localhost:3003'
-    ],
+    origin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002'],
     credentials: true
 }));
 
@@ -48,13 +57,12 @@ app.use("/api/profile", profileRoutes);
 
 // Test route
 app.get('/test', (req, res) => {
-    console.log('Test route hit');
-    res.json({ message: 'Server is working!' });
+    res.json({ message: 'API is working' });
 });
 
-// 404 handler
+// Error handling for undefined routes
 app.use((req, res) => {
-    console.log(`404 - Route not found: ${req.method} ${req.url}`);
+    console.log('Route not found:', req.method, req.url);
     res.status(404).json({ success: false, error: `Route not found: ${req.method} ${req.url}` });
 });
 
@@ -84,7 +92,12 @@ initBinance(process.env.BINANCE_API_KEY, process.env.BINANCE_API_SECRET);
 initTradeConfig(config);
 
 // Start Server (defined only once)
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3500;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
+});
+
+console.log('Environment variables loaded:', {
+  mongodbUri: process.env.MONGODB_URI ? 'Defined' : 'Undefined',
+  port: process.env.PORT
 });

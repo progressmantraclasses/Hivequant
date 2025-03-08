@@ -1,22 +1,10 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-    username: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    phoneNumber: String,
-    memberSince: {
-        type: Date,
-        default: Date.now
-    },
-    investmentGoals: [String],
+    username: { type: String, required: true, unique: true },
+    email: { type: String, required: true },
+    phoneNumber: { type: String },
+    memberSince: { type: Date },
     portfolio: {
         totalValue: Number,
         invested: Number,
@@ -29,25 +17,26 @@ const userSchema = new mongoose.Schema({
             color: String
         }]
     },
-    transactions: [{
-        type: { type: String },
-        date: { type: Date },
-        amount: { type: String },
-        icon: { type: String },
-        iconBg: { type: String },
-        textColor: { type: String }
-    }],
-    aiInsights: [{
-        title: String,
-        description: String,
-        icon: String
-    }],
     securitySettings: {
         twoFactorEnabled: Boolean,
         kycVerified: Boolean,
         priceAlertsEnabled: Boolean,
         apiAccessEnabled: Boolean
-    }
+    },
+    investmentGoals: [String],
+    transactions: [{
+        type: String,
+        date: Date,
+        amount: String,
+        icon: String,
+        iconBg: String,
+        textColor: String
+    }],
+    aiInsights: [{
+        title: String,
+        description: String,
+        icon: String
+    }]
 });
 
 module.exports = mongoose.model('User', userSchema); 

@@ -15,11 +15,12 @@ import Profile from "./Analysis/Profile"; // Import the Profile component
 
 function App() {
   return (
-    <div className="">
+    <div className="min-h-screen bg-gray-900">
       <Chatbot/>
       <BrowserRouter>
-      <Navbar/>
-        <Routes>
+        <Navbar/>
+        <div className="pt-16"> {/* Add padding-top here to account for fixed navbar */}
+          <Routes>
             <Route path='/' element={<LandingPage/>}/>
             <Route path='/about' element={<AboutSection/>}/>
             <Route path="/allFeatures" element={<FeatureSection/>}/>
@@ -28,9 +29,10 @@ function App() {
             <Route path="/premium" element={<SubscriptionPlan/>}/>
             <Route path="/dashboard" element={<Dashboard/>}/>
             <Route path="/ai" element={<AutoInvestMent/>}/>
-            <Route path="/profile" element={<Profile/>}/> {/* Add this route */}
-        </Routes>
-        <Footer/>
+            <Route path="/profile" element={<Profile/>}/>
+          </Routes>
+          <Footer/>
+        </div>
       </BrowserRouter>
     </div>
   );

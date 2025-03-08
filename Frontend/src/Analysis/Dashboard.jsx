@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AIIconImage from "../Images/AiRoboIcon.png";
@@ -133,6 +132,7 @@ const Dashboard = () => {
         console.error("Error fetching historical data:", error);
       }
     };
+    
 
     fetchHistoricalData();
   }, []);
@@ -155,9 +155,9 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex h-screen w-full bg-gray-900 text-white">
+    <div className="flex w-full bg-gray-900 text-white">
       {/* Sidebar */}
-      <div className="w-64 bg-gray-900 border-r border-gray-800 p-4">
+      <div className="w-64 bg-gray-900 border-r border-gray-800 p-4 fixed h-full top-16">
         <div className="flex items-center mb-8">
           <div className="bg-white p-2 rounded">
             <div className="text-black font-bold">◆ ProfitWave</div>
@@ -255,7 +255,7 @@ const Dashboard = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 overflow-auto ml-64">
         <div className="p-6">
           {/* Header */}
           <div className="flex justify-between items-center mb-6">

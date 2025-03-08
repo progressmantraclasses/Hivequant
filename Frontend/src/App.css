@@ -1,1 +1,6 @@
 /* write your css here */
+
+.page-container {
+  padding-top: 4rem; /* 64px, matches navbar height */
+  min-height: calc(100vh - 4rem); /* Full height minus navbar */
+}

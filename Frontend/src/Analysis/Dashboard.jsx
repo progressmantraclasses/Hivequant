@@ -1,7 +1,8 @@
 
 import React, { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
-import AIIconImage from "../Images/AiRoboIcon.png";
+import AiRoboIcon from '../Images/AiRoboIcon.png'
+
 import axios from "axios";
 import { Line } from "react-chartjs-2";
 import {
